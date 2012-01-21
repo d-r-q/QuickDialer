@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~ /*
+  ~  * Copyright (c) 2012 Alexey Zhidkov (Jdev). All Rights Reserved.
+  ~  */
+  -->
+
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="1dp"
+              android:text="Мариночка Воловая"
+              android:gravity="center_horizontal|top"
+              android:padding="2dp"
+              android:ellipsize="marquee"
+              android:textSize="11sp"
+              android:textStyle="bold"
+              android:shadowColor="#000000"
+              android:textColor="#FFFFFF"
+              android:shadowRadius="4"
+              android:layout_weight="0.25"/>
+
+</merge>

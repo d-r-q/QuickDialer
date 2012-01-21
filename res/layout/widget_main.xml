@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~ /*
+  ~  * Copyright (c) 2012 Alexey Zhidkov (Jdev). All Rights Reserved.
+  ~  */
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:background="@drawable/widget_bg"
+              android:padding="4dp"
+              android:layout_marginTop="3dp"
+              android:layout_marginBottom="3dp"
+              android:layout_marginLeft="6dp"
+              android:layout_marginRight="6dp"
+              android:orientation="vertical">
+
+    <FrameLayout android:id="@+id/data"
+                 android:layout_height="fill_parent"
+                 android:layout_width="fill_parent"
+                 android:layout_weight="1">
+
+        <LinearLayout android:id="@+id/loading_layout"
+
+                      android:layout_height="fill_parent"
+                      android:layout_width="fill_parent"
+                      android:orientation="vertical"
+                      android:layout_gravity="center"
+                      android:gravity="center"
+                      android:layout_weight="1">
+
+            <ProgressBar android:id="@+id/progress"
+                         style="@android:style/Widget.ProgressBar.Inverse"
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:gravity="center"/>
+
+            <TextView android:id="@+id/loading_lbl"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="Loading..."
+                      android:textColor="#000000"
+                      android:gravity="center"/>
+        </LinearLayout>
+
+        <LinearLayout android:id="@+id/data_layout"
+                      android:layout_height="fill_parent"
+                      android:layout_width="fill_parent"
+                      android:visibility="gone">
+
+            <LinearLayout style="@style/QdDataColumnLayout">
+
+                <ImageView style="@style/QdEntry.QdImg" android:src="@drawable/ic_contact_picture"/>
+                <TextView style="@style/QdEntry.QdLbl" android:text="Мариночка Воловая"/>
+
+                <ImageView style="@style/QdEntry.QdImg" android:src="@drawable/prev"/>
+                <TextView style="@style/QdEntry.QdLbl" android:text="Макс Васильев"/>
+
+            </LinearLayout>
+
+            <LinearLayout style="@style/QdDataColumnLayout">
+
+                <ImageView style="@style/QdEntry.QdImg" android:src="@drawable/ic_contact_picture"/>
+                <TextView style="@style/QdEntry.QdLbl" android:text="Мама"/>
+
+                <ImageView style="@style/QdEntry.QdImg" android:src="@drawable/icon"/>
+                <TextView style="@style/QdEntry.QdLbl" android:text="Евгений Коврижников"/>
+
+            </LinearLayout>
+
+            <LinearLayout style="@style/QdDataColumnLayout">
+
+                <ImageView style="@style/QdEntry.QdImg" android:src="@drawable/prev"/>
+                <TextView style="@style/QdEntry.QdLbl" android:text="Такси Грин"/>
+
+                <ImageView style="@style/QdEntry.QdImg" android:src="@drawable/icon"/>
+                <TextView style="@style/QdEntry.QdLbl" android:text="Влад Цой"/>
+
+            </LinearLayout>
+
+            <LinearLayout style="@style/QdDataColumnLayout">
+
+                <ImageView style="@style/QdEntry.QdImg" android:src="@drawable/prev"/>
+                <TextView style="@style/QdEntry.QdLbl" android:text="Учебный отдел"/>
+
+                <ImageView style="@style/QdEntry.QdImg" android:src="@drawable/ic_contact_picture"/>
+                <TextView style="@style/QdEntry.QdLbl" android:text="МегафонБаланс"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <ImageView style="@style/QdVerticalSpacer"/>
+
+    <LinearLayout style="@style/QdControlLayout"
+                  android:layout_height="30dp">
+
+        <ImageButton android:id="@+id/prev"
+                     style="@style/QdEntry.QdControlItem"
+                     android:src="@drawable/prev"
+                     android:background="@null"/>
+
+        <ImageView style="@style/QdHorizontalSpacer"/>
+
+        <ImageButton android:id="@+id/next"
+                     style="@style/QdEntry.QdControlItem"
+                     android:src="@drawable/next"/>
+
+        <ImageView style="@style/QdHorizontalSpacer"/>
+
+        <TextView style="@style/QdEntry.QdControlItem.Lbl"
+                  android:text="1/4"/>
+
+        <ImageView style="@style/QdHorizontalSpacer"/>
+
+        <ImageButton android:id="@+id/next"
+                     style="@style/QdEntry.QdControlItem"
+                     android:src="@drawable/next"/>
+
+    </LinearLayout>
+
+</LinearLayout>
