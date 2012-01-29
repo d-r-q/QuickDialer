@@ -25,7 +25,7 @@ public class QdSQLiteOpenHelper extends SQLiteOpenHelper {
     private static final String CALL_LOG_TBL = "qd_call_log";
 
     private static final String TIME_COL = "time";
-    private static final String PHONE_COL = "phone";
+    private static final String PHONE_COL = "lastDialedPhone";
     private static final String CONTACT_ID_COL = "contact_id";
     private static final String TIME_OF_DAY_COL = "time_of_day";
 

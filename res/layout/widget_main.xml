@@ -53,40 +53,40 @@
             <LinearLayout style="@style/QdDataColumnLayout">
 
                 <ImageView style="@style/QdEntry.QdImg" android:src="@drawable/ic_contact_picture"/>
-                <TextView style="@style/QdEntry.QdLbl" android:text="Мариночка Воловая"/>
+                <TextView android:id="@+id/mu.1.label" style="@style/QdEntry.QdLbl" android:text="No Data"/>
 
-                <ImageView style="@style/QdEntry.QdImg" android:src="@drawable/prev"/>
-                <TextView style="@style/QdEntry.QdLbl" android:text="Макс Васильев"/>
+                <ImageView style="@style/QdEntry.QdImg" android:src="@drawable/ic_contact_picture"/>
+                <TextView android:id="@+id/lc.1.label" style="@style/QdEntry.QdLbl" android:text="No Data"/>
 
             </LinearLayout>
 
             <LinearLayout style="@style/QdDataColumnLayout">
 
                 <ImageView style="@style/QdEntry.QdImg" android:src="@drawable/ic_contact_picture"/>
-                <TextView style="@style/QdEntry.QdLbl" android:text="Мама"/>
-
-                <ImageView style="@style/QdEntry.QdImg" android:src="@drawable/icon"/>
-                <TextView style="@style/QdEntry.QdLbl" android:text="Евгений Коврижников"/>
-
-            </LinearLayout>
-
-            <LinearLayout style="@style/QdDataColumnLayout">
-
-                <ImageView style="@style/QdEntry.QdImg" android:src="@drawable/prev"/>
-                <TextView style="@style/QdEntry.QdLbl" android:text="Такси Грин"/>
-
-                <ImageView style="@style/QdEntry.QdImg" android:src="@drawable/icon"/>
-                <TextView style="@style/QdEntry.QdLbl" android:text="Влад Цой"/>
-
-            </LinearLayout>
-
-            <LinearLayout style="@style/QdDataColumnLayout">
-
-                <ImageView style="@style/QdEntry.QdImg" android:src="@drawable/prev"/>
-                <TextView style="@style/QdEntry.QdLbl" android:text="Учебный отдел"/>
+                <TextView android:id="@+id/mu.2.label" style="@style/QdEntry.QdLbl" android:text="No Data"/>
 
                 <ImageView style="@style/QdEntry.QdImg" android:src="@drawable/ic_contact_picture"/>
-                <TextView style="@style/QdEntry.QdLbl" android:text="МегафонБаланс"/>
+                <TextView android:id="@+id/lc.2.label" style="@style/QdEntry.QdLbl" android:text="No Data"/>
+
+            </LinearLayout>
+
+            <LinearLayout style="@style/QdDataColumnLayout">
+
+                <ImageView style="@style/QdEntry.QdImg" android:src="@drawable/ic_contact_picture"/>
+                <TextView android:id="@+id/mu.3.label" style="@style/QdEntry.QdLbl" android:text="No Data"/>
+
+                <ImageView style="@style/QdEntry.QdImg" android:src="@drawable/ic_contact_picture"/>
+                <TextView android:id="@+id/lc.3.label" style="@style/QdEntry.QdLbl" android:text="No Data"/>
+
+            </LinearLayout>
+
+            <LinearLayout style="@style/QdDataColumnLayout">
+
+                <ImageView style="@style/QdEntry.QdImg" android:src="@drawable/ic_contact_picture"/>
+                <TextView android:id="@+id/mu.4.label" style="@style/QdEntry.QdLbl" android:text="No Data"/>
+
+                <ImageView style="@style/QdEntry.QdImg" android:src="@drawable/ic_contact_picture"/>
+                <TextView android:id="@+id/lc.4.label" style="@style/QdEntry.QdLbl" android:text="No Data"/>
 
             </LinearLayout>
 
@@ -101,19 +101,17 @@
 
         <ImageButton android:id="@+id/prev"
                      style="@style/QdEntry.QdControlItem"
-                     android:src="@drawable/prev"
-                     android:background="@null"/>
+                     android:src="@drawable/prev"/>
 
         <ImageView style="@style/QdHorizontalSpacer"/>
 
-        <ImageButton android:id="@+id/next"
-                     style="@style/QdEntry.QdControlItem"
+        <ImageButton android:id="@+id/settings" style="@style/QdEntry.QdControlItem"
                      android:src="@drawable/next"/>
 
         <ImageView style="@style/QdHorizontalSpacer"/>
 
-        <TextView style="@style/QdEntry.QdControlItem.Lbl"
-                  android:text="1/4"/>
+        <TextView android:id="@+id/page" style="@style/QdEntry.QdControlItem.Lbl"
+                  android:text="0/0"/>
 
         <ImageView style="@style/QdHorizontalSpacer"/>
 
