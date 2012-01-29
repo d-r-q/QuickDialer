@@ -9,37 +9,31 @@ package ru.jdev.qd;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
-import android.view.View;
-import android.widget.RemoteViews;
+import ru.jdev.qd.services.UpdateService;
 
-public class QDWidgetProvider extends AppWidgetProvider {
+public class QdWidgetProvider extends AppWidgetProvider {
 
-    private static final String LOG_TAG = "QD.WP";
+    public static final String PREFS_FILE_NAME = "qd_prefs";
 
-    private static final String[] names = {
-            "Мариночка Воловая", "Макс Васильев",
-            "Мама", "Такси Грин",
-            "Мегафон Балан", "Влад Цой",
-            "Учебный отдел", "Евгений Коврижников"};
+    private static final String TAG = "QD.WP";
 
-    private static final int[] imageIds = {R.drawable.prev, R.drawable.ic_contact_picture, R.drawable.icon};
+    public void onUpdate(final Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+        Log.v(TAG, "onUpdate");
 
-    public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        Log.v(LOG_TAG, "onUpdate");
-
-        for (int i = 0; i < appWidgetIds.length; i++) {
-            int appWidgetId = appWidgetIds[i];
-            Log.v(LOG_TAG, "update widget " + appWidgetId);
-
-            RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_main);
-            views.setViewVisibility(R.id.loading_layout, View.GONE);
-            views.setViewVisibility(R.id.data_layout, View.VISIBLE);
-            appWidgetManager.updateAppWidget(appWidgetId, views);
-
+        SharedPreferences.Editor prefsEditor = context.getSharedPreferences(PREFS_FILE_NAME, Context.MODE_PRIVATE).edit();
+        for (int appWidgetId : appWidgetIds) {
+            prefsEditor.putInt(Utils.getWidgetPageProperty(appWidgetId), 0);
         }
+        prefsEditor.commit();
 
-        Log.v(LOG_TAG, "onUpdate finished");
+        final Intent updateWidgets = new Intent(context, UpdateService.class);
+        updateWidgets.putExtra(UpdateService.EXTRA_APP_WIDGET_IDS, appWidgetIds);
+        context.startService(updateWidgets);
+
+        Log.v(TAG, "onUpdate finished");
     }
 
 }
