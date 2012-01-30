@@ -26,7 +26,8 @@
 
         <service android:name=".services.UpdateService"/>
         <service android:name=".services.MonitorCallLogService"/>
-        <service android:name=".services.TurnPageService"/>
+        <service android:name=".services.TurnPageLeftService"/>
+        <service android:name=".services.TurnPageRightService"/>
 
         <activity android:name=".ui.QDConfigActivity"/>
     </application>

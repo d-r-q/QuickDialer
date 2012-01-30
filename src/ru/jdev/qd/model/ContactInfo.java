@@ -6,6 +6,8 @@
 
 package ru.jdev.qd.model;
 
+import android.net.Uri;
+
 /**
  * User: jdev
  * Date: 21.01.12
@@ -14,15 +16,17 @@ public class ContactInfo {
     
     public final String name;
     public final String lookupId;
+    public final Uri photoURI;
     
     int usage;
     long lastCall;
     String lastDialedPhone;
 
-    public ContactInfo(String name, String lastDialedPhone, String lookupId) {
+    public ContactInfo(String name, String lastDialedPhone, String lookupId, Uri photoURI) {
         this.name = name;
         this.lastDialedPhone = lastDialedPhone;
         this.lookupId = lookupId;
+        this.photoURI = photoURI;
     }
 
     public String getName() {

@@ -6,6 +6,7 @@
 
 package ru.jdev.qd.model;
 
+import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -25,8 +26,9 @@ public class ContactInfoDao {
             CallLog.Calls.NUMBER, CallLog.Calls.DATE
     };
     private static final String[] contactsProjection = new String[]{
-            ContactsContract.PhoneLookup.LOOKUP_KEY, ContactsContract.PhoneLookup.DISPLAY_NAME, ContactsContract.PhoneLookup.PHOTO_ID
+            ContactsContract.PhoneLookup.LOOKUP_KEY, ContactsContract.PhoneLookup.DISPLAY_NAME, ContactsContract.PhoneLookup._ID, ContactsContract.PhoneLookup.PHOTO_ID 
     };
+    private static final int NO_PHOTO = -999;
 
     private final Map<String, List<ContactInfo>> contactsByPhones = new HashMap<String, List<ContactInfo>>();
     private final Map<String, ContactInfo> contactsByKeys = new HashMap<String, ContactInfo>();
@@ -84,14 +86,14 @@ public class ContactInfoDao {
             try {
                 if (c.moveToFirst()) {
                     do {
-                        contactInfos.add(getContactInfo(c.getString(0), phone, c.getString(1)));
+                        contactInfos.add(getContactInfo(c.getString(0), phone, c.getString(1), c.isNull(3) ? NO_PHOTO : c.getLong(2)));
                     } while (c.moveToNext());
                 }
             } finally {
                 c.close();
             }
             if (contactInfos.size() == 0) {
-                contactInfos.add(getContactInfo("QD.No lookup key" + phone, phone, phone));
+                contactInfos.add(getContactInfo("QD.No lookup key" + phone, phone, phone, NO_PHOTO));
             }
 
             contactsByPhones.put(phone, contactInfos);
@@ -100,10 +102,14 @@ public class ContactInfoDao {
         return contactInfos;
     }
 
-    private ContactInfo getContactInfo(String lookupKey, String phone, String name) {
+    private ContactInfo getContactInfo(String lookupKey, String phone, String name, long id) {
         ContactInfo ci = contactsByKeys.get(lookupKey);
         if (ci == null) {
-            ci = new ContactInfo(name, phone, lookupKey);
+            final Uri person = ContentUris.withAppendedId(
+                    ContactsContract.Contacts.CONTENT_URI, id);
+            final Uri photoURI = Uri.withAppendedPath(person,
+                    ContactsContract.Contacts.Photo.CONTENT_DIRECTORY);
+            ci = new ContactInfo(name, phone, lookupKey, id != NO_PHOTO ? photoURI : null);
             synchronized (contactsByKeys) {
                 contactsByKeys.put(lookupKey, ci);
             }

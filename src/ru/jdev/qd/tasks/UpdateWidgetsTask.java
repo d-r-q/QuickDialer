@@ -33,22 +33,27 @@ public class UpdateWidgetsTask implements Runnable {
 
     private static final String TAG = "QD.UW";
 
-    private static final int[] mostUsedLabelIds = {R.id.mu_1_label, R.id.mu_2_label, R.id.mu_3_label, R.id.mu_4_label};
-    private static final int[] lastCalledLabelIds = {R.id.lc_1_label, R.id.lc_2_label, R.id.lc_3_label, R.id.lc_4_label};
+    private static final int[][] mostUsedLabelIds = {
+            {R.id.mu_1_label, R.id.mu_2_label, R.id.mu_3_label, R.id.mu_4_label},
+            {R.id.mu_1_photo, R.id.mu_2_photo, R.id.mu_3_photo, R.id.mu_4_photo}};
+
+    private static final int[][] lastCalledLabelIds = {
+            {R.id.lc_1_label, R.id.lc_2_label, R.id.lc_3_label, R.id.lc_4_label},
+            {R.id.lc_1_photo, R.id.lc_2_photo, R.id.lc_3_photo, R.id.lc_4_photo}};
 
     private final Context context;
     private final Pager pager;
 
-    private int[] appWidgetIds;    
+    private int[] appWidgetIds;
 
     public UpdateWidgetsTask(Context context, Pager pager, int[] appWidgetIds) {
         this.context = context;
         this.pager = pager;
         this.appWidgetIds = appWidgetIds;
     }
-    
+
     @Override
-    public void run() {        
+    public void run() {
         final AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
         if (appWidgetIds == null) {
             appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, QdWidgetProvider.class));
@@ -70,9 +75,9 @@ public class UpdateWidgetsTask implements Runnable {
         Log.v(TAG, "Page: " + page);
         setRow(views, page.lastCalled, lastCalledLabelIds);
         setRow(views, page.mostUsed, mostUsedLabelIds);
-        
+
         views.setTextViewText(R.id.page, String.format("%d/%d", currentPage + 1, Utils.getPagesCount()));
-        
+
         final Intent nextPage = new Intent(context, TurnPageRightService.class);
         nextPage.putExtra(TurnPageService.EXTRA_APP_WIDGET_ID, appWidgetId);
         views.setOnClickPendingIntent(R.id.next, PendingIntent.getService(context, 0, nextPage, PendingIntent.FLAG_UPDATE_CURRENT));
@@ -85,20 +90,27 @@ public class UpdateWidgetsTask implements Runnable {
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 
-    private void setRow(RemoteViews views, ContactInfo[] contactInfos, int[] labels) {
+    private void setRow(RemoteViews views, ContactInfo[] contactInfos, int[][] labels) {
         for (int i = 0; i < contactInfos.length; i++) {
             final ContactInfo contactInfo = contactInfos[i];
             if (contactInfo != null) {
                 Log.v(TAG, contactInfo.getName() + " : " + contactInfo.getLastDialedPhone() + " : " + contactInfo.getLookupId() + " : " +
                         contactInfo.getUsage());
-                views.setTextViewText(labels[i], contactInfo.name);
+                views.setTextViewText(labels[0][i], contactInfo.name);
 
                 final Intent callIntent = new Intent(Intent.ACTION_CALL);
                 callIntent.setData(Uri.parse("tel:" + contactInfo.getLastDialedPhone()));
                 final PendingIntent pi = PendingIntent.getActivity(context, 0, callIntent, Intent.FLAG_ACTIVITY_NEW_TASK);
-                views.setOnClickPendingIntent(labels[i], pi);
+                views.setOnClickPendingIntent(labels[0][i], pi);
+
+                if (contactInfo.photoURI != null) {
+                    views.setImageViewUri(labels[1][i], contactInfo.photoURI);
+                } else {
+                    views.setImageViewResource(labels[1][i], R.drawable.ic_contact_picture);
+                }
             } else {
-                views.setTextViewText(labels[i], "No Data");
+                views.setTextViewText(labels[0][i], "No Data");
+                views.setImageViewResource(labels[1][i], R.drawable.ic_contact_picture);
             }
         }
     }
