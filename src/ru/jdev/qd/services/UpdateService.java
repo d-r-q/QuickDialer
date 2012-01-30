@@ -34,22 +34,23 @@ public class UpdateService extends Service {
     public static final String EXTRA_FORCE_UPDATE_DAO = "forceUpdateDao";
 
     private static ContactInfoDao contactInfoDao;
+    private static Pager pager;
     private final HandlerThread handlerThread = new HandlerThread("Model an UI updating thread");
     private Handler handler;
-    private Pager pager;
 
     @Override
     public void onCreate() {
         Log.v(TAG, "UpdateService created");
         handlerThread.start();
         handler = new Handler(handlerThread.getLooper());
-        pager = new Pager(getContactInfoDao(this), Utils.getPagesCount());
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         final ContactInfoDao contactInfoDao = getContactInfoDao(this);
+        Log.v(TAG, "Pager: " + pager);
+        Log.v(TAG, "ContactDao is updated: " + contactInfoDao.isUpdated());
         if (!contactInfoDao.isUpdated() || intent.getBooleanExtra(EXTRA_FORCE_UPDATE_DAO, false)) {
             handler.post(new UpdatePagerTask(contactInfoDao, pager));
         }
@@ -63,6 +64,7 @@ public class UpdateService extends Service {
     public static ContactInfoDao getContactInfoDao(Context context) {
         if (contactInfoDao == null) {
             contactInfoDao = new ContactInfoDao(context);
+            pager = new Pager(contactInfoDao, Utils.getPagesCount());
         }
         return contactInfoDao;
     }

@@ -21,6 +21,8 @@ import ru.jdev.qd.Utils;
 import ru.jdev.qd.model.ContactInfo;
 import ru.jdev.qd.model.Page;
 import ru.jdev.qd.model.Pager;
+import ru.jdev.qd.services.TurnPageLeftService;
+import ru.jdev.qd.services.TurnPageRightService;
 import ru.jdev.qd.services.TurnPageService;
 
 /**
@@ -71,15 +73,13 @@ public class UpdateWidgetsTask implements Runnable {
         
         views.setTextViewText(R.id.page, String.format("%d/%d", currentPage + 1, Utils.getPagesCount()));
         
-        final Intent nextPage = new Intent(context, TurnPageService.class);
+        final Intent nextPage = new Intent(context, TurnPageRightService.class);
         nextPage.putExtra(TurnPageService.EXTRA_APP_WIDGET_ID, appWidgetId);
-        nextPage.putExtra(TurnPageService.EXTRA_DIRECTION, true);
-        views.setOnClickPendingIntent(R.id.next, PendingIntent.getService(context, 0, nextPage, 0));
+        views.setOnClickPendingIntent(R.id.next, PendingIntent.getService(context, 0, nextPage, PendingIntent.FLAG_UPDATE_CURRENT));
 
-        final Intent prevPage = new Intent(context, TurnPageService.class);
-        nextPage.putExtra(TurnPageService.EXTRA_APP_WIDGET_ID, appWidgetId);
-        nextPage.putExtra(TurnPageService.EXTRA_DIRECTION, false);
-        views.setOnClickPendingIntent(R.id.prev, PendingIntent.getService(context, 0, prevPage, 0));
+        final Intent prevPage = new Intent(context, TurnPageLeftService.class);
+        prevPage.putExtra(TurnPageService.EXTRA_APP_WIDGET_ID, appWidgetId);
+        views.setOnClickPendingIntent(R.id.prev, PendingIntent.getService(context, 0, prevPage, PendingIntent.FLAG_UPDATE_CURRENT));
         Log.v(TAG, "Pending intents setted");
 
         appWidgetManager.updateAppWidget(appWidgetId, views);

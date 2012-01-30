@@ -13,12 +13,11 @@ import android.util.Log;
 import ru.jdev.qd.QdWidgetProvider;
 import ru.jdev.qd.Utils;
 
-public class TurnPageService extends IntentService {
+public abstract class TurnPageService extends IntentService {
 
     private static final String TAG = "QD.TPS";
 
     public static final String EXTRA_APP_WIDGET_ID = "appWidgetId";
-    public static final String EXTRA_DIRECTION = "dir";
     
     private static final int NO_WIDGET_ID = -999;
 
@@ -34,24 +33,13 @@ public class TurnPageService extends IntentService {
             Log.w(TAG, "Invalid intent received: " + intent.toString());
             return;
         }
-        final boolean dir = intent.getBooleanExtra(EXTRA_DIRECTION, true);
+        Log.v(TAG, intent.getExtras().toString());
 
         final SharedPreferences prefs = getSharedPreferences(QdWidgetProvider.PREFS_FILE_NAME, MODE_PRIVATE);
         final String widgetPagePropName = Utils.getWidgetPageProperty(appWidgetId);
         final int pagesCount = Utils.getPagesCount();
 
-        int curPage = prefs.getInt(widgetPagePropName, 0);
-        if (dir) {
-            curPage++;
-            if (curPage >= pagesCount) {
-                curPage = 0;
-            }
-        } else {
-            curPage--;
-            if (curPage < 0) {
-                curPage = pagesCount - 1;
-            }
-        }
+        final int curPage = turnPage(prefs.getInt(widgetPagePropName, 0), pagesCount);
         final SharedPreferences.Editor editor = prefs.edit();
         editor.putInt(widgetPagePropName, curPage);
         editor.commit();
@@ -60,4 +48,6 @@ public class TurnPageService extends IntentService {
         updateWidgets.putExtra(UpdateService.EXTRA_APP_WIDGET_IDS, new int[]{appWidgetId});
         startService(updateWidgets);
     }
+
+    protected abstract int turnPage(int curPage, int pagesCount);
 }

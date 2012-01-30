@@ -21,8 +21,12 @@ public class ContactInfoDao {
 
     private static final String SELECT_CALLS_WHERE = String.format("%s >= ?", CallLog.Calls.DATE);
 
-    private static final String[] callsProjection = new String[]{CallLog.Calls.NUMBER, CallLog.Calls.DATE};
-    private static final String[] contactsProjection = new String[]{ContactsContract.PhoneLookup.LOOKUP_KEY, ContactsContract.PhoneLookup.DISPLAY_NAME};
+    private static final String[] callsProjection = new String[]{
+            CallLog.Calls.NUMBER, CallLog.Calls.DATE
+    };
+    private static final String[] contactsProjection = new String[]{
+            ContactsContract.PhoneLookup.LOOKUP_KEY, ContactsContract.PhoneLookup.DISPLAY_NAME, ContactsContract.PhoneLookup.PHOTO_ID
+    };
 
     private final Map<String, List<ContactInfo>> contactsByPhones = new HashMap<String, List<ContactInfo>>();
     private final Map<String, ContactInfo> contactsByKeys = new HashMap<String, ContactInfo>();
