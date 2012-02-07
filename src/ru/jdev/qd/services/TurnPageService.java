@@ -7,10 +7,14 @@
 package ru.jdev.qd.services;
 
 import android.app.IntentService;
+import android.appwidget.AppWidgetManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.view.View;
+import android.widget.RemoteViews;
 import ru.jdev.qd.QdWidgetProvider;
+import ru.jdev.qd.R;
 import ru.jdev.qd.Utils;
 
 public abstract class TurnPageService extends IntentService {
@@ -33,6 +37,10 @@ public abstract class TurnPageService extends IntentService {
             Log.w(TAG, "Invalid intent received: " + intent.toString());
             return;
         }
+        final RemoteViews views = new RemoteViews(getPackageName(), R.layout.widget_main);
+        views.setViewVisibility(R.id.darkener, View.VISIBLE);
+        AppWidgetManager.getInstance(this).updateAppWidget(appWidgetId, views);
+
         Log.v(TAG, intent.getExtras().toString());
 
         final SharedPreferences prefs = getSharedPreferences(QdWidgetProvider.PREFS_FILE_NAME, MODE_PRIVATE);

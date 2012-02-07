@@ -67,6 +67,7 @@ public class UpdateWidgetsTask implements Runnable {
         Log.v(TAG, "update widget: " + appWidgetId);
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_main);
         views.setViewVisibility(R.id.loading_layout, View.GONE);
+        views.setViewVisibility(R.id.darkener, View.GONE);
         views.setViewVisibility(R.id.data_layout, View.VISIBLE);
 
         final int currentPage = context.getSharedPreferences(QdWidgetProvider.PREFS_FILE_NAME, Context.MODE_PRIVATE).getInt(Utils.getWidgetPageProperty(appWidgetId), 0);
