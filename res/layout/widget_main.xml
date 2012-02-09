@@ -121,14 +121,14 @@
     <LinearLayout style="@style/QdControlLayout"
                   android:layout_height="30dp">
 
-        <ImageButton android:id="@+id/prev"
+        <ImageView android:id="@+id/prev"
                      style="@style/QdEntry.QdControlItem"
                      android:src="@drawable/prev"/>
 
         <ImageView style="@style/QdHorizontalSpacer"/>
 
-        <ImageButton android:id="@+id/settings" style="@style/QdEntry.QdControlItem"
-                     android:src="@drawable/next"/>
+        <ImageView android:id="@+id/settings" style="@style/QdEntry.QdControlItem"
+                     android:src="@drawable/settings"/>
 
         <ImageView style="@style/QdHorizontalSpacer"/>
 
@@ -137,7 +137,7 @@
 
         <ImageView style="@style/QdHorizontalSpacer"/>
 
-        <ImageButton android:id="@+id/next"
+        <ImageView android:id="@+id/next"
                      style="@style/QdEntry.QdControlItem"
                      android:src="@drawable/next"/>
 
