@@ -1,6 +1,6 @@
 /*
  *
- *  * Copyright (c) 2012 Alexey Zhidkov (Jdev). All Rights Reserved.
+ *  * Copyright (c) 2012 Aleksey Zhidkov. All Rights Reserved.
  *  
  */
 

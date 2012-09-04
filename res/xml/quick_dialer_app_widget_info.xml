@@ -2,7 +2,7 @@
 
 <!--
   ~ /*
-  ~  * Copyright (c) 2012 Alexey Zhidkov (Jdev). All Rights Reserved.
+  ~  * Copyright (c) 2012 Aleksey Zhidkov. All Rights Reserved.
   ~  */
   -->
 
@@ -10,4 +10,4 @@
                         android:minWidth="250dp"
                         android:minHeight="110dp"
                         android:updatePeriodMillis="86400000"
-                        android:initialLayout="@layout/widget_main"/>
+                        android:initialLayout="@layout/widget_main" />
