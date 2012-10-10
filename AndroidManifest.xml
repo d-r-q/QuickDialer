@@ -28,6 +28,8 @@
         <service android:name=".services.MonitorCallLogService"/>
         <service android:name=".services.TurnPageLeftService"/>
         <service android:name=".services.TurnPageRightService"/>
+        <service android:name=".services.TapListenerService"/>
+        <service android:name=".services.TurnOffService"/>
 
         <activity android:name=".ui.QDConfigActivity"/>
     </application>

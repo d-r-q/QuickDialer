@@ -10,13 +10,12 @@
 
     <TextView android:layout_width="wrap_content"
               android:layout_height="1dp"
-              android:text="Мариночка Воловая"
               android:gravity="center_horizontal|top"
               android:padding="2dp"
               android:ellipsize="marquee"
               android:textSize="11sp"
               android:textStyle="bold"
-              android:shadowColor="#000000"
+              android:shadowColor="@drawable/label_color_selector"
               android:textColor="#FFFFFF"
               android:shadowRadius="4"
               android:layout_weight="0.25"/>

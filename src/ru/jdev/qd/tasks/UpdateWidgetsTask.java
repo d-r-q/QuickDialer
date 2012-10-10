@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.RemoteViews;
 import ru.jdev.qd.QdWidgetProvider;
 import ru.jdev.qd.R;
+import ru.jdev.qd.services.TapListenerService;
 import ru.jdev.qd.Utils;
 import ru.jdev.qd.model.ContactInfo;
 import ru.jdev.qd.model.Page;
@@ -74,8 +75,8 @@ public class UpdateWidgetsTask implements Runnable {
         Log.v(TAG, "Current page: " + String.valueOf(currentPage));
         final Page page = pager.getPage(currentPage);
         Log.v(TAG, "Page: " + page);
-        setRow(views, page.lastCalled, lastCalledLabelIds);
-        setRow(views, page.mostUsed, mostUsedLabelIds);
+        setRow(views, page.lastCalled, lastCalledLabelIds, appWidgetId, 0);
+        setRow(views, page.mostUsed, mostUsedLabelIds, appWidgetId, lastCalledLabelIds.length);
 
         views.setTextViewText(R.id.page, String.format("%d/%d", currentPage + 1, Utils.getPagesCount()));
 
@@ -86,12 +87,13 @@ public class UpdateWidgetsTask implements Runnable {
         final Intent prevPage = new Intent(context, TurnPageLeftService.class);
         prevPage.putExtra(TurnPageService.EXTRA_APP_WIDGET_ID, appWidgetId);
         views.setOnClickPendingIntent(R.id.prev, PendingIntent.getService(context, 0, prevPage, PendingIntent.FLAG_UPDATE_CURRENT));
+
         Log.v(TAG, "Pending intents setted");
 
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 
-    private void setRow(RemoteViews views, ContactInfo[] contactInfos, int[][] labels) {
+    private void setRow(RemoteViews views, ContactInfo[] contactInfos, int[][] labels, int appWidgetId, int idx) {
         for (int i = 0; i < contactInfos.length; i++) {
             final ContactInfo contactInfo = contactInfos[i];
             if (contactInfo != null) {
@@ -99,10 +101,15 @@ public class UpdateWidgetsTask implements Runnable {
                         contactInfo.getUsage());
                 views.setTextViewText(labels[0][i], contactInfo.name);
 
-                final Intent callIntent = new Intent(Intent.ACTION_CALL);
-                callIntent.setData(Uri.parse("tel:" + contactInfo.getLastDialedPhone()));
-                final PendingIntent pi = PendingIntent.getActivity(context, 0, callIntent, Intent.FLAG_ACTIVITY_NEW_TASK);
+                Log.i(TAG, "V3");
+                final Intent callIntent = new Intent(context, TapListenerService.class);
+                callIntent.putExtra("phoneToCall", contactInfo.getLastDialedPhone());
+                callIntent.putExtra("labelId", labels[0][i]);
+                callIntent.putExtra(TapListenerService.EXTRA_APP_WIDGET_ID, appWidgetId);
+                callIntent.setData(Uri.parse("qd://" + labels[0][i]));
+                final PendingIntent pi = PendingIntent.getService(context, idx++, callIntent, PendingIntent.FLAG_CANCEL_CURRENT);
                 views.setOnClickPendingIntent(labels[0][i], pi);
+                views.setOnClickPendingIntent(labels[1][i], pi);
 
                 if (contactInfo.photoURI != null) {
                     views.setImageViewUri(labels[1][i], contactInfo.photoURI);
