@@ -15,7 +15,7 @@
               android:ellipsize="marquee"
               android:textSize="11sp"
               android:textStyle="bold"
-              android:shadowColor="@drawable/label_color_selector"
+              android:shadowColor="000000"
               android:textColor="#FFFFFF"
               android:shadowRadius="4"
               android:layout_weight="0.25"/>
