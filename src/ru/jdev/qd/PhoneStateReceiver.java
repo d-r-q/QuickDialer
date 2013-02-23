@@ -13,7 +13,7 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import ru.jdev.qd.services.MonitorCallLogService;
 
-public class PhoneStateReciever extends BroadcastReceiver {
+public class PhoneStateReceiver extends BroadcastReceiver {
 
     private static final String TAG = "QD.PSR";
 

@@ -13,15 +13,11 @@ import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.net.Uri;
-import android.os.Handler;
-import android.os.HandlerThread;
 import android.util.Log;
 import android.widget.RemoteViews;
 import ru.jdev.qd.QdWidgetProvider;
 import ru.jdev.qd.R;
-import ru.jdev.qd.tasks.StopServiceTask;
 
 /**
  * User: Aleksey Zhidkov
@@ -58,7 +54,8 @@ public class TapListenerService extends IntentService {
         if (phoneToCall == null) {
             setPhoneToCall(intent.getStringExtra("phoneToCall"));
             Log.i(TAG, intent.getStringExtra("phoneToCall"));
-            views.setInt(labelId, "setTextColor", Color.RED);
+            views.setFloat(labelId, "setTextSize", 14);
+            views.setInt(labelId, "setTextColor", getResources().getColor(R.color.activeLabelColor));
         } else {
             final Intent callIntent = new Intent(Intent.ACTION_CALL);
             callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

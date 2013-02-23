@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ /*
+  ~  * Copyright (c) 2012 Aleksey Zhidkov. All Rights Reserved.
+  ~  */
+  -->
+
+<resources>
+
+    <color name="activeLabelColor">#AADD00</color>
+    <color name="nonActiveLabelColor">#FFFFFF</color>
+
+</resources>

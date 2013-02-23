@@ -52,11 +52,11 @@
             <LinearLayout style="@style/QdDataColumnLayout">
 
                 <ImageView android:id="@+id/mu.1.photo" style="@style/QdEntry.QdImg"
-                           android:src="@drawable/ic_contact_picture"/>
+                           android:src="@drawable/ic_contact_picture" android:visibility="gone"/>
                 <TextView android:id="@+id/mu.1.label" style="@style/QdEntry.QdLbl" android:text="No Data"/>
 
                 <ImageView android:id="@+id/lc.1.photo" style="@style/QdEntry.QdImg"
-                           android:src="@drawable/ic_contact_picture"/>
+                           android:src="@drawable/ic_contact_picture" android:visibility="gone"/>
                 <TextView android:id="@+id/lc.1.label" style="@style/QdEntry.QdLbl" android:text="No Data"/>
 
             </LinearLayout>
@@ -64,11 +64,11 @@
             <LinearLayout style="@style/QdDataColumnLayout">
 
                 <ImageView android:id="@+id/mu.2.photo" style="@style/QdEntry.QdImg"
-                           android:src="@drawable/ic_contact_picture"/>
+                           android:src="@drawable/ic_contact_picture" android:visibility="gone"/>
                 <TextView android:id="@+id/mu.2.label" style="@style/QdEntry.QdLbl" android:text="No Data"/>
 
                 <ImageView android:id="@+id/lc.2.photo" style="@style/QdEntry.QdImg"
-                           android:src="@drawable/ic_contact_picture"/>
+                           android:src="@drawable/ic_contact_picture" android:visibility="gone"/>
                 <TextView android:id="@+id/lc.2.label" style="@style/QdEntry.QdLbl" android:text="No Data"/>
 
             </LinearLayout>
@@ -76,11 +76,11 @@
             <LinearLayout style="@style/QdDataColumnLayout">
 
                 <ImageView android:id="@+id/mu.3.photo" style="@style/QdEntry.QdImg"
-                           android:src="@drawable/ic_contact_picture"/>
+                           android:src="@drawable/ic_contact_picture" android:visibility="gone"/>
                 <TextView android:id="@+id/mu.3.label" style="@style/QdEntry.QdLbl" android:text="No Data"/>
 
                 <ImageView android:id="@+id/lc.3.photo" style="@style/QdEntry.QdImg"
-                           android:src="@drawable/ic_contact_picture"/>
+                           android:src="@drawable/ic_contact_picture" android:visibility="gone"/>
                 <TextView android:id="@+id/lc.3.label" style="@style/QdEntry.QdLbl" android:text="No Data"/>
 
             </LinearLayout>
@@ -88,11 +88,11 @@
             <LinearLayout style="@style/QdDataColumnLayout">
 
                 <ImageView android:id="@+id/mu.4.photo" style="@style/QdEntry.QdImg"
-                           android:src="@drawable/ic_contact_picture"/>
+                           android:src="@drawable/ic_contact_picture" android:visibility="gone"/>
                 <TextView android:id="@+id/mu.4.label" style="@style/QdEntry.QdLbl" android:text="No Data"/>
 
                 <ImageView android:id="@+id/lc.4.photo" style="@style/QdEntry.QdImg"
-                           android:src="@drawable/ic_contact_picture"/>
+                           android:src="@drawable/ic_contact_picture" android:visibility="gone"/>
                 <TextView android:id="@+id/lc.4.label" style="@style/QdEntry.QdLbl" android:text="No Data"/>
 
             </LinearLayout>

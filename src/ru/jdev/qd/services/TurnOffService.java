@@ -37,7 +37,9 @@ public class TurnOffService extends IntentService {
         editor.commit();
 
         final RemoteViews views = new RemoteViews(getPackageName(), R.layout.widget_main);
-        views.setInt(intent.getIntExtra("labelId", -1), "setTextColor", Color.BLACK);
+        final int labelId = intent.getIntExtra("labelId", -1);
+        views.setFloat(labelId, "setTextSize", 12);
+        views.setInt(labelId, "setTextColor", getResources().getColor(R.color.nonActiveLabelColor));
 
         final AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
         appWidgetManager.updateAppWidget(intent.getIntExtra("appWidgetId", -1), views);

@@ -78,16 +78,6 @@ public class UpdateWidgetsTask implements Runnable {
         setRow(views, page.lastCalled, lastCalledLabelIds, appWidgetId, 0);
         setRow(views, page.mostUsed, mostUsedLabelIds, appWidgetId, lastCalledLabelIds.length);
 
-        views.setTextViewText(R.id.page, String.format("%d/%d", currentPage + 1, Utils.getPagesCount()));
-
-        final Intent nextPage = new Intent(context, TurnPageRightService.class);
-        nextPage.putExtra(TurnPageService.EXTRA_APP_WIDGET_ID, appWidgetId);
-        views.setOnClickPendingIntent(R.id.next, PendingIntent.getService(context, 0, nextPage, PendingIntent.FLAG_UPDATE_CURRENT));
-
-        final Intent prevPage = new Intent(context, TurnPageLeftService.class);
-        prevPage.putExtra(TurnPageService.EXTRA_APP_WIDGET_ID, appWidgetId);
-        views.setOnClickPendingIntent(R.id.prev, PendingIntent.getService(context, 0, prevPage, PendingIntent.FLAG_UPDATE_CURRENT));
-
         Log.v(TAG, "Pending intents setted");
 
         appWidgetManager.updateAppWidget(appWidgetId, views);
@@ -102,14 +92,9 @@ public class UpdateWidgetsTask implements Runnable {
                 views.setTextViewText(labels[0][i], contactInfo.name);
 
                 Log.i(TAG, "V3");
-                final Intent callIntent = new Intent(context, TapListenerService.class);
-                callIntent.putExtra("phoneToCall", contactInfo.getLastDialedPhone());
-                callIntent.putExtra("labelId", labels[0][i]);
-                callIntent.putExtra(TapListenerService.EXTRA_APP_WIDGET_ID, appWidgetId);
-                callIntent.setData(Uri.parse("qd://" + labels[0][i]));
-                final PendingIntent pi = PendingIntent.getService(context, idx++, callIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-                views.setOnClickPendingIntent(labels[0][i], pi);
-                views.setOnClickPendingIntent(labels[1][i], pi);
+
+                addIntent(views, labels[0][i], labels[0][i], idx++, appWidgetId, contactInfo.getLastDialedPhone());
+                addIntent(views, labels[1][i], labels[0][i], idx++, appWidgetId, contactInfo.getLastDialedPhone());
 
                 if (contactInfo.photoURI != null) {
                     views.setImageViewUri(labels[1][i], contactInfo.photoURI);
@@ -121,6 +106,16 @@ public class UpdateWidgetsTask implements Runnable {
                 views.setImageViewResource(labels[1][i], R.drawable.ic_contact_picture);
             }
         }
+    }
+
+    private void addIntent(RemoteViews views, int viewId, int labelId, int idx, int appWidgetId, String phoneToCall) {
+        final Intent callIntent = new Intent(context, TapListenerService.class);
+        callIntent.putExtra("phoneToCall", phoneToCall);
+        callIntent.putExtra("labelId", labelId);
+        callIntent.putExtra(TapListenerService.EXTRA_APP_WIDGET_ID, appWidgetId);
+        callIntent.setData(Uri.parse("qd://" + viewId));
+        final PendingIntent pi = PendingIntent.getService(context, idx, callIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        views.setOnClickPendingIntent(viewId, pi);
     }
 
 }

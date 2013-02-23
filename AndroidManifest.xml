@@ -10,7 +10,7 @@
 
     <application android:icon="@drawable/icon" android:label="@string/app_name">
 
-        <receiver android:name=".PhoneStateReciever">
+        <receiver android:name=".PhoneStateReceiver">
                 <intent-filter>
                     <action android:name="android.intent.action.PHONE_STATE"/>
                 </intent-filter>
