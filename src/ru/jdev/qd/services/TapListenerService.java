@@ -19,10 +19,6 @@ import android.widget.RemoteViews;
 import ru.jdev.qd.QdWidgetProvider;
 import ru.jdev.qd.R;
 
-/**
- * User: Aleksey Zhidkov
- * Date: 09.10.12
- */
 public class TapListenerService extends IntentService {
 
     private static final String TAG = "QD.TL";
@@ -33,11 +29,6 @@ public class TapListenerService extends IntentService {
 
     public TapListenerService() {
         super("TapListenerService");
-    }
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
     }
 
     @Override

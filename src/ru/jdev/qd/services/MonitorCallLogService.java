@@ -15,14 +15,8 @@ import android.os.IBinder;
 import android.provider.CallLog;
 import ru.jdev.qd.tasks.StopServiceTask;
 
-/**
- * User: jdev
- * Date: 28.01.12
- */
+import java.util.concurrent.TimeUnit;
 public class MonitorCallLogService extends Service {
-
-    public static final String EXTRA_IS_IN_IDLE = "isInIdle";
-    private static final int WAIT_FOR_UPDATE_TIMEOUT = 60 * 1000;
 
     private final HandlerThread handlerThread = new HandlerThread("Model an UI updating thread");
 
@@ -38,21 +32,13 @@ public class MonitorCallLogService extends Service {
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        if (intent.getBooleanExtra(EXTRA_IS_IN_IDLE, true)) {
-            handler.postDelayed(new StopServiceTask(this, StopServiceTask.FORCE_STOP), WAIT_FOR_UPDATE_TIMEOUT);
-        }
-        
-        return START_NOT_STICKY;
-    }
-
-    @Override
     public void onDestroy() {
         getContentResolver().unregisterContentObserver(observer);
         handlerThread.quit();
     }
 
     private class ContentObserverImpl extends ContentObserver {
+
         public ContentObserverImpl(Handler handler) {
             super(handler);
         }

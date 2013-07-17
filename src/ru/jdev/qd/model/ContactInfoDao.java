@@ -102,14 +102,14 @@ public class ContactInfoDao {
         return contactInfos;
     }
 
-    private ContactInfo getContactInfo(String lookupKey, String phone, String name, long id) {
+    private ContactInfo getContactInfo(String lookupKey, String phone, String name, long photoId) {
         ContactInfo ci = contactsByKeys.get(lookupKey);
         if (ci == null) {
             final Uri person = ContentUris.withAppendedId(
-                    ContactsContract.Contacts.CONTENT_URI, id);
+                    ContactsContract.Contacts.CONTENT_URI, photoId);
             final Uri photoURI = Uri.withAppendedPath(person,
                     ContactsContract.Contacts.Photo.CONTENT_DIRECTORY);
-            ci = new ContactInfo(name, phone, lookupKey, id != NO_PHOTO ? photoURI : null);
+            ci = new ContactInfo(name, phone, lookupKey, photoId != NO_PHOTO ? photoURI : null);
             synchronized (contactsByKeys) {
                 contactsByKeys.put(lookupKey, ci);
             }
