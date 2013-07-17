@@ -7,7 +7,7 @@
 
 <resources>
 
-    <color name="activeLabelColor">#AADD00</color>
+    <color name="activeLabelColor">#33B5E5</color>
     <color name="nonActiveLabelColor">#FFFFFF</color>
 
 </resources>

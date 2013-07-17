@@ -45,7 +45,6 @@ public class TapListenerService extends IntentService {
         if (phoneToCall == null) {
             setPhoneToCall(intent.getStringExtra("phoneToCall"));
             Log.i(TAG, intent.getStringExtra("phoneToCall"));
-            views.setFloat(labelId, "setTextSize", 14);
             views.setInt(labelId, "setTextColor", getResources().getColor(R.color.activeLabelColor));
         } else {
             final Intent callIntent = new Intent(Intent.ACTION_CALL);

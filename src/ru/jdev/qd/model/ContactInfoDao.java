@@ -1,9 +1,3 @@
-/*
- *
- *  * Copyright (c) 2012 Aleksey Zhidkov. All Rights Reserved.
- *  
- */
-
 package ru.jdev.qd.model;
 
 import android.content.ContentUris;
@@ -26,7 +20,7 @@ public class ContactInfoDao {
             CallLog.Calls.NUMBER, CallLog.Calls.DATE
     };
     private static final String[] contactsProjection = new String[]{
-            ContactsContract.PhoneLookup.LOOKUP_KEY, ContactsContract.PhoneLookup.DISPLAY_NAME, ContactsContract.PhoneLookup._ID, ContactsContract.PhoneLookup.PHOTO_ID 
+            ContactsContract.PhoneLookup.LOOKUP_KEY, ContactsContract.PhoneLookup.DISPLAY_NAME, ContactsContract.PhoneLookup._ID, ContactsContract.PhoneLookup.PHOTO_ID
     };
     private static final int NO_PHOTO = -999;
 
@@ -102,14 +96,13 @@ public class ContactInfoDao {
         return contactInfos;
     }
 
-    private ContactInfo getContactInfo(String lookupKey, String phone, String name, long photoId) {
+    private ContactInfo getContactInfo(String lookupKey, String phone, String name, long personId) {
         ContactInfo ci = contactsByKeys.get(lookupKey);
         if (ci == null) {
-            final Uri person = ContentUris.withAppendedId(
-                    ContactsContract.Contacts.CONTENT_URI, photoId);
-            final Uri photoURI = Uri.withAppendedPath(person,
-                    ContactsContract.Contacts.Photo.CONTENT_DIRECTORY);
-            ci = new ContactInfo(name, phone, lookupKey, photoId != NO_PHOTO ? photoURI : null);
+            final Uri personUri = ContentUris.withAppendedId(
+                    ContactsContract.Contacts.CONTENT_URI, personId);
+
+            ci = new ContactInfo(name, phone, lookupKey, personId != NO_PHOTO ? personUri : null);
             synchronized (contactsByKeys) {
                 contactsByKeys.put(lookupKey, ci);
             }

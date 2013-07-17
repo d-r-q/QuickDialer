@@ -16,17 +16,17 @@ public class ContactInfo {
     
     public final String name;
     public final String lookupId;
-    public final Uri photoURI;
+    public final Uri personUri;
     
     int usage;
     long lastCall;
     String lastDialedPhone;
 
-    public ContactInfo(String name, String lastDialedPhone, String lookupId, Uri photoURI) {
+    public ContactInfo(String name, String lastDialedPhone, String lookupId, Uri personUri) {
         this.name = name;
         this.lastDialedPhone = lastDialedPhone;
         this.lookupId = lookupId;
-        this.photoURI = photoURI;
+        this.personUri = personUri;
     }
 
     public String getName() {

@@ -11,7 +11,10 @@ import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
@@ -22,9 +25,8 @@ import ru.jdev.qd.Utils;
 import ru.jdev.qd.model.ContactInfo;
 import ru.jdev.qd.model.Page;
 import ru.jdev.qd.model.Pager;
-import ru.jdev.qd.services.TurnPageLeftService;
-import ru.jdev.qd.services.TurnPageRightService;
-import ru.jdev.qd.services.TurnPageService;
+
+import java.io.InputStream;
 
 /**
  * User: jdev
@@ -87,17 +89,25 @@ public class UpdateWidgetsTask implements Runnable {
         for (int i = 0; i < contactInfos.length; i++) {
             final ContactInfo contactInfo = contactInfos[i];
             if (contactInfo != null) {
-                Log.v(TAG, contactInfo.getName() + " : " + contactInfo.getLastDialedPhone() + " : " + contactInfo.getLookupId() + " : " +
-                        contactInfo.getUsage());
+                Log.v(TAG, "Fill contact: " + contactInfo.getName() + " : " + contactInfo.getLastDialedPhone() + " : " + contactInfo.getLookupId() + " : " +
+                        contactInfo.getUsage() + " : " + contactInfo.personUri);
                 views.setTextViewText(labels[0][i], contactInfo.name);
-
-                Log.i(TAG, "V3");
 
                 addIntent(views, labels[0][i], labels[0][i], idx++, appWidgetId, contactInfo.getLastDialedPhone());
                 addIntent(views, labels[1][i], labels[0][i], idx++, appWidgetId, contactInfo.getLastDialedPhone());
 
-                if (contactInfo.photoURI != null) {
-                    views.setImageViewUri(labels[1][i], contactInfo.photoURI);
+                if (contactInfo.personUri != null) {
+                    Log.v(TAG, "personUri: " +contactInfo.personUri);
+                    final InputStream input = ContactsContract.Contacts
+                            .openContactPhotoInputStream(context.getContentResolver(),
+                                    contactInfo.personUri);
+
+                    if (input != null) {
+                        Bitmap bitmap = BitmapFactory.decodeStream(input);
+                        Log.v(TAG, "Bitmap object: " + bitmap);
+                        Log.v(TAG, "Bitmap size: " + bitmap.getByteCount());
+                        views.setImageViewBitmap(labels[1][i], bitmap);
+                    }
                 } else {
                     views.setImageViewResource(labels[1][i], R.drawable.ic_contact_picture);
                 }
