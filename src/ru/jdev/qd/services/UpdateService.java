@@ -26,7 +26,7 @@ public class UpdateService extends Service {
 
     private static final String TAG = "QD.US";
 
-    private static final long KEEP_IN_MEMORY_TIME = TimeUnit.MINUTES.toMillis(1);
+    private static final long KEEP_IN_MEMORY_TIME = 1000 * 60;
 
     public static final String EXTRA_APP_WIDGET_IDS = "appWidgetIds";
     public static final String EXTRA_FORCE_UPDATE_DAO = "forceUpdateDao";

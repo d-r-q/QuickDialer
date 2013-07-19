@@ -105,7 +105,7 @@ public class UpdateWidgetsTask implements Runnable {
                     if (input != null) {
                         Bitmap bitmap = BitmapFactory.decodeStream(input);
                         Log.v(TAG, "Bitmap object: " + bitmap);
-                        Log.v(TAG, "Bitmap size: " + bitmap.getByteCount());
+                        Log.v(TAG, "Bitmap size: " + bitmap.getWidth());
                         views.setImageViewBitmap(labels[1][i], bitmap);
                     }
                 } else {
