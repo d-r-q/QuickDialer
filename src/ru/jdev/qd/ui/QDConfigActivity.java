@@ -1,9 +1,3 @@
-/*
- *
- *  * Copyright (c) 2012 Aleksey Zhidkov. All Rights Reserved.
- *
- */
-
 package ru.jdev.qd.ui;
 
 import android.app.Activity;

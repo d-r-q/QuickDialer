@@ -1,9 +1,3 @@
-/*
- *
- *  * Copyright (c) 2012 Aleksey Zhidkov. All Rights Reserved.
- *
- */
-
 package ru.jdev.qd.services;
 
 public class TurnPageRightService extends TurnPageService {
