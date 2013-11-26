@@ -45,7 +45,9 @@ public class ContactInfoDao {
                 do {
                     final String calledPhone = c.getString(0);
                     final long callDate = Long.valueOf(c.getString(1));
-                    addCall(calledPhone, callDate);
+                    if (calledPhone.trim().length() > 0) {
+                        addCall(calledPhone, callDate);
+                    }
                     isUpdated = true;
                 } while (c.moveToNext());
             }
@@ -75,6 +77,8 @@ public class ContactInfoDao {
         if (contactInfos == null) {
             contactInfos = new LinkedList<ContactInfo>();
 
+            Log.e(TAG, "!~!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + phone);
+            System.out.printf("!!!!!!!!!!!!!!!!!!!!!!!" + phone + " /n");
             final Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phone));
             final Cursor c = context.getContentResolver().query(uri, contactsProjection, null, null, null);
             try {
