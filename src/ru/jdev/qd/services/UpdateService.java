@@ -27,7 +27,9 @@ public class UpdateService extends Service {
 
     private static ContactInfoDao contactInfoDao;
     private static Pager pager;
+
     private final HandlerThread handlerThread = new HandlerThread("Model an UI updating thread");
+
     private Handler handler;
 
     @Override
@@ -56,7 +58,7 @@ public class UpdateService extends Service {
     public static ContactInfoDao getContactInfoDao(Context context) {
         if (contactInfoDao == null) {
             contactInfoDao = new ContactInfoDao(context);
-            pager = new Pager(contactInfoDao, Utils.getPagesCount());
+            pager = new Pager(contactInfoDao);
         }
         return contactInfoDao;
     }

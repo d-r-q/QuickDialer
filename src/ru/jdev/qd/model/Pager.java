@@ -5,56 +5,49 @@ import java.util.*;
 import static java.lang.Long.signum;
 
 public class Pager {
-    
-    private final ContactInfoDao contactInfoDao;
-    private final Page[] pages;
 
-    public Pager(ContactInfoDao contactInfoDao, int pagesCount) {
+    public static final ContactInfo FAKE_CONTACT = new ContactInfo("No Data", null, null, null);
+    private final Page page = new Page();
+
+    private final ContactInfoDao contactInfoDao;
+
+    public Pager(ContactInfoDao contactInfoDao) {
         this.contactInfoDao = contactInfoDao;
-        pages = new Page[pagesCount];
     }
-    
-    public void fillPages() {
+
+    public void fillPage() {
         final List<ContactInfo> mostUsed = new ArrayList<ContactInfo>(contactInfoDao.getContactInfoList());
         Collections.sort(mostUsed, new ByUsageCmp());
         final Iterator<ContactInfo> mostUsedIterator = mostUsed.iterator();
         final List<ContactInfo> lastCalled = new ArrayList<ContactInfo>(contactInfoDao.getContactInfoList());
         Collections.sort(lastCalled, new ByLastCallCmp());
         final Iterator<ContactInfo> lastCalledIterator = lastCalled.iterator();
-        
+
         final Set<String> usedKeys = new HashSet<String>();
         final Set<String> usedPhones = new HashSet<String>();
 
-        for (int i = 0; i < pages.length; i++) {
-            final Page page = new Page();
-            pages[i] = page;
-            fillRow(lastCalledIterator, usedKeys, usedPhones, page.lastCalled);
-            fillRow(mostUsedIterator, usedKeys, usedPhones, page.mostUsed);
-        }
+        fillRow(lastCalledIterator, usedKeys, usedPhones, page.lastCalled);
+        fillRow(mostUsedIterator, usedKeys, usedPhones, page.mostUsed);
     }
 
     private void fillRow(Iterator<ContactInfo> iterator, Set<String> usedKeys, Set<String> usedPhones, ContactInfo[] row) {
-        for (int i = 0; i < row.length && iterator.hasNext(); i++) {
-            ContactInfo ci = iterator.next();
+        for (int i = 0; i < row.length; i++) {
+            final ContactInfo ci = iterator.hasNext() ? iterator.next() : FAKE_CONTACT;
             if (usedKeys.contains(ci.getLookupId()) ||
                     usedPhones.contains(ci.getLastDialedPhone())) {
                 i--;
                 continue;
             }
             row[i] = ci;
-            usedKeys.add(ci.getLookupId());
-            usedPhones.add(ci.getLastDialedPhone());
+            if (ci != FAKE_CONTACT) {
+                usedKeys.add(ci.getLookupId());
+                usedPhones.add(ci.getLastDialedPhone());
+            }
         }
     }
-    
-    public Page getPage(int idx) {
-        if (idx >= pages.length) {
-            idx = 0;
-        } else if (idx < 0) {
-            idx = pages.length - 1;
-        }
 
-        return pages[idx];
+    public Page getPage() {
+        return page;
     }
 
     private final static class ByUsageCmp implements Comparator<ContactInfo> {
@@ -70,5 +63,5 @@ public class Pager {
             return signum(rhs.lastCall - lhs.lastCall);
         }
     }
-    
+
 }

@@ -36,9 +36,10 @@ public class TapListenerService extends IntentService {
         final String phoneToCall = getPhoneToCall();
         Log.i(TAG, phoneToCall == null ? "null" : phoneToCall);
         final int labelId = intent.getIntExtra("labelId", -1);
-        if (phoneToCall == null) {
-            setPhoneToCall(intent.getStringExtra("phoneToCall"));
-            Log.i(TAG, intent.getStringExtra("phoneToCall"));
+        final String newPhoneToCall = intent.getStringExtra("phoneToCall");
+        if (phoneToCall == null || !phoneToCall.equals(newPhoneToCall)) {
+            setPhoneToCall(newPhoneToCall);
+            Log.i(TAG, newPhoneToCall);
             views.setInt(labelId, "setTextColor", intent.getIntExtra("contactColor", getResources().getColor(R.color.activeLabelColor)));
         } else {
             final Intent callIntent = new Intent(Intent.ACTION_CALL);
