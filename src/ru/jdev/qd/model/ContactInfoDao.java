@@ -77,8 +77,6 @@ public class ContactInfoDao {
         if (contactInfos == null) {
             contactInfos = new LinkedList<ContactInfo>();
 
-            Log.e(TAG, "!~!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + phone);
-            System.out.printf("!!!!!!!!!!!!!!!!!!!!!!!" + phone + " /n");
             final Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phone));
             final Cursor c = context.getContentResolver().query(uri, contactsProjection, null, null, null);
             try {
@@ -91,7 +89,7 @@ public class ContactInfoDao {
                 c.close();
             }
             if (contactInfos.size() == 0) {
-                contactInfos.add(getContactInfo("QD.No lookup key" + phone, phone, phone, NO_PHOTO));
+                contactInfos.add(getContactInfo("QD.No lookup key" + phone, phone, null, NO_PHOTO));
             }
 
             contactsByPhones.put(phone, contactInfos);

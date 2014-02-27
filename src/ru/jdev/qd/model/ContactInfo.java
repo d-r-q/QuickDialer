@@ -1,5 +1,6 @@
 package ru.jdev.qd.model;
 
+import android.graphics.Color;
 import android.net.Uri;
 
 /**
@@ -8,9 +9,9 @@ import android.net.Uri;
  */
 public class ContactInfo {
     
-    public final String name;
-    public final String lookupId;
-    public final Uri personUri;
+    private final String name;
+    private final String lookupId;
+    private final Uri personUri;
     
     int usage;
     long lastCall;
@@ -39,8 +40,21 @@ public class ContactInfo {
         return usage;
     }
 
-    public long getLastCall() {
-        return lastCall;
+    public Uri getPersonUri() {
+        return personUri;
+    }
+
+    public String getContactLabel() {
+        if (name != null) {
+            return name;
+        } else {
+            return lastDialedPhone;
+        }
+    }
+
+    public int contactColor() {
+        long hashCode = ((long)getContactLabel().hashCode()) - Integer.MIN_VALUE;
+        return Color.HSVToColor(new float[]{(int) (hashCode % 360), 0.84F, 0.8F});
     }
 
     @Override
