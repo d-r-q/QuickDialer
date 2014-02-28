@@ -1,10 +1,6 @@
-<!--
-  ~ /*
-  ~  * Copyright (c) 2012 Aleksey Zhidkov. All Rights Reserved.
-  ~  */
-  -->
-
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Quick Dialer</string>
-    <string name="loading">Loading...</string>
+    <string name="loading">Loading…</string>
+    <string name="no_data">No Data</string>
 </resources>

@@ -7,11 +7,11 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
 import android.provider.CallLog;
-import ru.jdev.qd.tasks.StopServiceTask;
+import ru.jdev.qd.utils.StopServiceTask;
 
-import java.util.concurrent.TimeUnit;
 public class MonitorCallLogService extends Service {
 
+    public static final int CALL_LOG_UPDATE_TIMEOUT = 60 * 1000;
     private final HandlerThread handlerThread = new HandlerThread("Model an UI updating thread");
 
     private Handler handler;
@@ -23,6 +23,7 @@ public class MonitorCallLogService extends Service {
         handler = new Handler(handlerThread.getLooper());
         observer = new ContentObserverImpl(handler);
         getContentResolver().registerContentObserver(CallLog.Calls.CONTENT_URI, false, observer);
+        handler.postDelayed(new StopServiceTask(this, StopServiceTask.FORCE_STOP), CALL_LOG_UPDATE_TIMEOUT);
     }
 
     @Override
@@ -44,9 +45,8 @@ public class MonitorCallLogService extends Service {
 
         @Override
         public void onChange(boolean selfChange) {
-            final Intent updateWidgets = new Intent(getApplicationContext(), UpdateService.class);
-            updateWidgets.putExtra(UpdateService.EXTRA_FORCE_UPDATE_DAO, true);
-            startService(updateWidgets);
+            final Intent updateIntent = UpdateService.createIntent(MonitorCallLogService.this, null, true);
+            startService(updateIntent);
             handler.post(new StopServiceTask(MonitorCallLogService.this, StopServiceTask.FORCE_STOP));
         }
     }

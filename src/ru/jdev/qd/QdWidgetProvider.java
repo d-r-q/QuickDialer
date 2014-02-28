@@ -3,31 +3,31 @@ package ru.jdev.qd;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.util.Log;
 import ru.jdev.qd.services.UpdateService;
 
 public class QdWidgetProvider extends AppWidgetProvider {
 
-    public static final String PREFS_FILE_NAME = "qd_prefs";
-
-    private static final String TAG = "QD.WP";
+    public static final String PREFS_FILE_NAME_PREFIX = "qd_prefs";
 
     public void onUpdate(final Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        Log.v(TAG, "onUpdate");
+        context.startService(UpdateService.createIntent(context, appWidgetIds, true));
+    }
 
-        SharedPreferences.Editor prefsEditor = context.getSharedPreferences(PREFS_FILE_NAME, Context.MODE_PRIVATE).edit();
-        for (int appWidgetId : appWidgetIds) {
-            prefsEditor.putInt(Utils.getWidgetPageProperty(appWidgetId), 0);
-        }
-        prefsEditor.commit();
+    public static String getActivePhone(Context context, int appWidgetId) {
+        final SharedPreferences prefs = getSharedPreferences(context, appWidgetId);
+        return prefs.getString("phoneToCall", null);
+    }
 
-        final Intent updateWidgets = new Intent(context, UpdateService.class);
-        updateWidgets.putExtra(UpdateService.EXTRA_APP_WIDGET_IDS, appWidgetIds);
-        context.startService(updateWidgets);
+    public static void setActivePhone(Context context, int appWidgetId, String activePhone) {
+        final SharedPreferences prefs = getSharedPreferences(context, appWidgetId);
+        final SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("phoneToCall", activePhone);
+        editor.apply();
+    }
 
-        Log.v(TAG, "onUpdate finished");
+    private static SharedPreferences getSharedPreferences(Context context, int appWidgetId) {
+        return context.getSharedPreferences(QdWidgetProvider.PREFS_FILE_NAME_PREFIX + appWidgetId, Context.MODE_PRIVATE);
     }
 
 }

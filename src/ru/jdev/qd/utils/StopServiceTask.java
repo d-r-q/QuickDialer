@@ -1,12 +1,7 @@
-package ru.jdev.qd.tasks;
+package ru.jdev.qd.utils;
 
 import android.app.Service;
-import ru.jdev.qd.services.UpdateService;
 
-/**
- * User: jdev
- * Date: 28.01.12
- */
 public class StopServiceTask implements Runnable {
 
     public static final int FORCE_STOP = -999;

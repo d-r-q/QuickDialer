@@ -41,11 +41,11 @@ public class ContactInfoDao {
         final Cursor c = context.getContentResolver().query(CallLog.Calls.CONTENT_URI, callsProjection, SELECT_CALLS_WHERE, params, null);
         boolean isUpdated = false;
         try {
-            if (c.moveToFirst()) {
+            if (c != null && c.moveToFirst()) {
                 do {
                     final String calledPhone = c.getString(0);
                     final long callDate = Long.valueOf(c.getString(1));
-                    if (calledPhone.trim().length() > 0) {
+                    if (calledPhone != null && calledPhone.trim().length() > 0) {
                         addCall(calledPhone, callDate);
                     }
                     isUpdated = true;
@@ -56,7 +56,9 @@ public class ContactInfoDao {
             }
             return isUpdated;
         } finally {
-            c.close();
+            if (c != null) {
+                c.close();
+            }
         }
     }
 
@@ -80,13 +82,15 @@ public class ContactInfoDao {
             final Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phone));
             final Cursor c = context.getContentResolver().query(uri, contactsProjection, null, null, null);
             try {
-                if (c.moveToFirst()) {
+                if (c != null && c.moveToFirst()) {
                     do {
                         contactInfos.add(getContactInfo(c.getString(0), phone, c.getString(1), c.isNull(3) ? NO_PHOTO : c.getLong(2)));
                     } while (c.moveToNext());
                 }
             } finally {
-                c.close();
+                if (c != null) {
+                    c.close();
+                }
             }
             if (contactInfos.size() == 0) {
                 contactInfos.add(getContactInfo("QD.No lookup key" + phone, phone, null, NO_PHOTO));

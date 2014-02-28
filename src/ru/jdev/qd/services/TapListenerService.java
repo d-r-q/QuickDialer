@@ -3,15 +3,11 @@ package ru.jdev.qd.services;
 import android.app.AlarmManager;
 import android.app.IntentService;
 import android.app.PendingIntent;
-import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.util.Log;
-import android.widget.RemoteViews;
 import ru.jdev.qd.QdWidgetProvider;
-import ru.jdev.qd.R;
 
 public class TapListenerService extends IntentService {
 
@@ -19,7 +15,7 @@ public class TapListenerService extends IntentService {
 
     public static final String EXTRA_APP_WIDGET_ID = "appWidgetId";
 
-    private static final int NO_WIDGET_ID = -999;
+    public static final String PHONE_TO_CALL = "phoneToCall";
 
     public TapListenerService() {
         super("TapListenerService");
@@ -27,46 +23,51 @@ public class TapListenerService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        final int appWidgetId = intent.getIntExtra(EXTRA_APP_WIDGET_ID, NO_WIDGET_ID);
-        if (appWidgetId == NO_WIDGET_ID) {
+        final int unknown = -1;
+        final int appWidgetId = intent.getIntExtra(EXTRA_APP_WIDGET_ID, unknown);
+        if (appWidgetId == unknown) {
             return;
         }
 
-        final RemoteViews views = new RemoteViews(getPackageName(), R.layout.widget_main);
-        final String phoneToCall = getPhoneToCall();
-        Log.i(TAG, phoneToCall == null ? "null" : phoneToCall);
-        final int labelId = intent.getIntExtra("labelId", -1);
-        final String newPhoneToCall = intent.getStringExtra("phoneToCall");
-        if (phoneToCall == null || !phoneToCall.equals(newPhoneToCall)) {
-            setPhoneToCall(newPhoneToCall);
-            Log.i(TAG, newPhoneToCall);
-            views.setInt(labelId, "setTextColor", intent.getIntExtra("contactColor", getResources().getColor(R.color.activeLabelColor)));
+        final String activePhone = QdWidgetProvider.getActivePhone(this, appWidgetId);
+        Log.i(TAG, activePhone == null ? "null" : activePhone);
+
+        final String selectedPhone = intent.getStringExtra(PHONE_TO_CALL);
+        if (isActivePhoneSelected(activePhone, selectedPhone)) {
+            startDial(activePhone);
         } else {
-            final Intent callIntent = new Intent(Intent.ACTION_CALL);
-            callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            callIntent.setData(Uri.parse("tel:" + phoneToCall));
-            startActivity(callIntent);
+            activatePhone(appWidgetId, selectedPhone);
         }
 
-        final Intent turnOffIntent = new Intent(this, TurnOffService.class);
-        turnOffIntent.putExtra("labelId", labelId);
-        turnOffIntent.putExtra("appWidgetId", appWidgetId);
-        ((AlarmManager)getSystemService(Context.ALARM_SERVICE)).set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 500,
-                PendingIntent.getService(this, 0, turnOffIntent, PendingIntent.FLAG_UPDATE_CURRENT));
-
-        final AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
-        appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 
-    private void setPhoneToCall(String phoneToCall) {
-        final SharedPreferences prefs = getSharedPreferences(QdWidgetProvider.PREFS_FILE_NAME, MODE_PRIVATE);
-        final SharedPreferences.Editor editor = prefs.edit();
-        editor.putString("phoneToCall", phoneToCall);
-        editor.commit();
+    private void activatePhone(int appWidgetId, String newPhoneToCall) {
+        QdWidgetProvider.setActivePhone(this, appWidgetId, newPhoneToCall);
+        startService(new Intent(this, UpdateService.class));
+        setupDeactivateNotification(appWidgetId, newPhoneToCall);
     }
 
-    public String getPhoneToCall() {
-        final SharedPreferences prefs = getSharedPreferences(QdWidgetProvider.PREFS_FILE_NAME, MODE_PRIVATE);
-        return prefs.getString("phoneToCall", null);
+    private void startDial(String phoneToDeal) {
+        final Intent callIntent = new Intent(Intent.ACTION_CALL);
+        callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        callIntent.setData(Uri.parse("tel:" + phoneToDeal));
+        startActivity(callIntent);
+    }
+
+    private boolean isActivePhoneSelected(String activePhone, String selectedPhone) {
+        return activePhone != null && activePhone.equals(selectedPhone);
+    }
+
+    private void setupDeactivateNotification(int appWidgetId, String activePhone) {
+        final Intent deactivateIntent = DeactivateService.createIntent(this, appWidgetId, activePhone);
+        ((AlarmManager) getSystemService(Context.ALARM_SERVICE)).set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 500,
+                PendingIntent.getService(this, 0, deactivateIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+    }
+
+    public static Intent createIntent(Context context, int appWidgetId, String phoneToCall) {
+        final Intent handleTapIntent = new Intent(context, TapListenerService.class);
+        handleTapIntent.putExtra(TapListenerService.PHONE_TO_CALL, phoneToCall);
+        handleTapIntent.putExtra(TapListenerService.EXTRA_APP_WIDGET_ID, appWidgetId);
+        return handleTapIntent;
     }
 }

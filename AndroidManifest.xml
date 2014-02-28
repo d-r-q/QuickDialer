@@ -1,9 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ /*
-  ~  * Copyright (c) 2012 Aleksey Zhidkov. All Rights Reserved.
-  ~  */
-  -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="ru.jdev.qd" android:versionCode="5" android:versionName="1.0.4">
@@ -34,7 +29,7 @@
         <service android:name=".services.UpdateService"/>
         <service android:name=".services.MonitorCallLogService"/>
         <service android:name=".services.TapListenerService"/>
-        <service android:name=".services.TurnOffService"/>
+        <service android:name=".services.DeactivateService"/>
 
     </application>
 

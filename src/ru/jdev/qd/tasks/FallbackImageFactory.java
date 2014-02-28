@@ -26,6 +26,7 @@ public class FallbackImageFactory {
         foreground.setColor(Color.rgb(255, 255, 255));
         foreground.setSubpixelText(true);
         foreground.setTextSize(78F);
+        foreground.setTypeface(Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL));
 
         canvas.drawRect(0, 0, IMAGE_WIDTH, IMAGE_HEIGHT, background);
     }
@@ -39,9 +40,8 @@ public class FallbackImageFactory {
         } else {
             String contactLabel = String.valueOf(contactInfo.getContactLabel().charAt(0)).toUpperCase();
 
-            foreground.setTypeface(Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL));
-            Paint.FontMetrics fm = foreground.getFontMetrics();
             float textWidth = foreground.measureText(contactLabel);
+            final Paint.FontMetrics fm = foreground.getFontMetrics();
 
             canvas.drawText(contactLabel, (IMAGE_WIDTH - textWidth) / 2, (IMAGE_HEIGHT - fm.top - fm.bottom) / 2, foreground);
         }

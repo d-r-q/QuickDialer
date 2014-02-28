@@ -3,16 +3,12 @@ package ru.jdev.qd.model;
 import android.graphics.Color;
 import android.net.Uri;
 
-/**
- * User: jdev
- * Date: 21.01.12
- */
 public class ContactInfo {
-    
+
     private final String name;
     private final String lookupId;
     private final Uri personUri;
-    
+
     int usage;
     long lastCall;
     String lastDialedPhone;
@@ -53,7 +49,7 @@ public class ContactInfo {
     }
 
     public int contactColor() {
-        long hashCode = ((long)getContactLabel().hashCode()) - Integer.MIN_VALUE;
+        long hashCode = ((long) getContactLabel().hashCode()) - Integer.MIN_VALUE;
         return Color.HSVToColor(new float[]{(int) (hashCode % 360), 0.84F, 0.8F});
     }
 
