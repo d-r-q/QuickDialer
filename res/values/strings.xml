@@ -6,4 +6,5 @@
 
 <resources>
     <string name="app_name">Quick Dialer</string>
+    <string name="loading">Loading...</string>
 </resources>

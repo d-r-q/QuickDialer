@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
-import android.view.View;
 import android.widget.RemoteViews;
 import ru.jdev.qd.QdWidgetProvider;
 import ru.jdev.qd.R;
@@ -60,9 +59,6 @@ public class UpdateWidgetsTask implements Runnable {
     private void updateWidget(AppWidgetManager appWidgetManager, int appWidgetId, Pager pager) {
         Log.v(TAG, "update widget: " + appWidgetId);
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_main);
-        views.setViewVisibility(R.id.loading_layout, View.GONE);
-        views.setViewVisibility(R.id.darkener, View.GONE);
-        views.setViewVisibility(R.id.data_layout, View.VISIBLE);
 
         final int currentPage = context.getSharedPreferences(QdWidgetProvider.PREFS_FILE_NAME, Context.MODE_PRIVATE).getInt(Utils.getWidgetPageProperty(appWidgetId), 0);
         Log.v(TAG, "Current page: " + String.valueOf(currentPage));
