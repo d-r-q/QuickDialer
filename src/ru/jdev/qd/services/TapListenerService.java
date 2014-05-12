@@ -30,7 +30,7 @@ public class TapListenerService extends IntentService {
         }
 
         final String activePhone = QdWidgetProvider.getActivePhone(this, appWidgetId);
-        Log.i(TAG, activePhone == null ? "null" : activePhone);
+        Log.v(TAG, activePhone == null ? "null" : activePhone);
 
         final String selectedPhone = intent.getStringExtra(PHONE_TO_CALL);
         if (isActivePhoneSelected(activePhone, selectedPhone)) {

@@ -11,7 +11,7 @@ public class DeactivateService extends IntentService {
     public static final String APP_WIDGET_ID = "appWidgetId";
     public static final String EXPECTED_PHONE = "expectedPhone";
 
-    private static final String TAG = "QD.TOS";
+    private static final String TAG = "QD.DAS";
 
     public DeactivateService() {
         super(DeactivateService.class.getName());
@@ -19,7 +19,7 @@ public class DeactivateService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Log.w(TAG, "Turn off");
+        Log.v(TAG, "Turn off");
 
         final int unknown = -1;
 

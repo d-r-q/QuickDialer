@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
+import android.provider.CallLog;
+import android.provider.ContactsContract;
 import android.util.Log;
 import ru.jdev.qd.QdWidgetProvider;
 import ru.jdev.qd.model.ContactInfoDao;
@@ -15,30 +17,36 @@ import ru.jdev.qd.model.Pager;
 import ru.jdev.qd.tasks.ContactImageFactory;
 import ru.jdev.qd.tasks.UpdatePagerTask;
 import ru.jdev.qd.tasks.UpdateWidgetsTask;
-import ru.jdev.qd.utils.StopServiceTask;
 
 public class UpdateService extends Service {
 
     private static final String TAG = "QD.US";
-
-    private static final long KEEP_IN_MEMORY_TIME = 1000 * 60;
 
     public static final String EXTRA_APP_WIDGET_IDS = "appWidgetIds";
     public static final String EXTRA_FORCE_UPDATE_DAO = "forceUpdateDao";
 
     private static ContactInfoDao contactInfoDao;
     private static Pager pager;
-    private static ContactImageFactory contactImageFactory;
+    private static ContactImageFactory contactImageFactory = new ContactImageFactory();
 
     private final HandlerThread handlerThread = new HandlerThread("Model an UI updating thread");
+
+    private CallLogObserver callLogObserver;
+    private ContactsObserver contactsObserver;
 
     private Handler handler;
 
     @Override
     public void onCreate() {
-        Log.v(TAG, "UpdateService created");
+        Log.i(TAG, "UpdateService created");
+
         handlerThread.start();
         handler = new Handler(handlerThread.getLooper());
+
+        callLogObserver = new CallLogObserver(handler, this);
+        contactsObserver = new ContactsObserver(handler, this, contactImageFactory);
+        getContentResolver().registerContentObserver(CallLog.Calls.CONTENT_URI, true, callLogObserver);
+        getContentResolver().registerContentObserver(ContactsContract.Contacts.CONTENT_URI, true, contactsObserver);
     }
 
     @Override
@@ -52,8 +60,6 @@ public class UpdateService extends Service {
         }
         handler.post(new UpdateWidgetsTask(contactImageFactory, getApplicationContext(), pager, getAppWidgetIds(intent)));
 
-        // keep app in memory for minute, for quick response for consequent calls
-        handler.postDelayed(new StopServiceTask(this, startId), KEEP_IN_MEMORY_TIME);
         return START_REDELIVER_INTENT;
     }
 
@@ -74,14 +80,15 @@ public class UpdateService extends Service {
         if (contactInfoDao == null) {
             contactInfoDao = new ContactInfoDao(context);
             pager = new Pager(contactInfoDao);
-            contactImageFactory = new ContactImageFactory();
         }
         return contactInfoDao;
     }
 
     @Override
     public void onDestroy() {
-        Log.v(TAG, "UpdateService destroyed");
+        Log.i(TAG, "UpdateService destroyed");
+        getContentResolver().unregisterContentObserver(callLogObserver);
+        getContentResolver().unregisterContentObserver(contactsObserver);
         handlerThread.quit();
     }
 

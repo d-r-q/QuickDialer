@@ -36,7 +36,7 @@ public class ContactInfoDao {
     }
 
     public synchronized boolean update() {
-        Log.v(TAG, "Update ContactInfoDao");
+        Log.i(TAG, "Update ContactInfoDao");
         final String[] params = {Long.toString(lastUpdateTimeMillis)};
         final Cursor c = context.getContentResolver().query(CallLog.Calls.CONTENT_URI, callsProjection, SELECT_CALLS_WHERE, params, null);
         boolean isUpdated = false;
