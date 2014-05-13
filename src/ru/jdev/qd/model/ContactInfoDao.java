@@ -20,9 +20,10 @@ public class ContactInfoDao {
             CallLog.Calls.NUMBER, CallLog.Calls.DATE
     };
     private static final String[] contactsProjection = new String[]{
-            ContactsContract.PhoneLookup.LOOKUP_KEY, ContactsContract.PhoneLookup.DISPLAY_NAME, ContactsContract.PhoneLookup._ID, ContactsContract.PhoneLookup.PHOTO_ID
+            ContactsContract.PhoneLookup._ID, ContactsContract.PhoneLookup.LOOKUP_KEY, ContactsContract.PhoneLookup.DISPLAY_NAME, ContactsContract.PhoneLookup.PHOTO_ID
     };
     private static final int NO_PHOTO = -999;
+    private static final String NO_LOOKUP_KEY = "QD.No lookup key";
 
     private final Map<String, List<ContactInfo>> contactsByPhones = new HashMap<String, List<ContactInfo>>();
     private final Map<String, ContactInfo> contactsByKeys = new HashMap<String, ContactInfo>();
@@ -62,6 +63,29 @@ public class ContactInfoDao {
         }
     }
 
+    public synchronized void updatePhotos() {
+        for (ContactInfo contactInfo : contactsByKeys.values()) {
+            if (contactInfo.getName() == null || contactInfo.getName().startsWith(NO_LOOKUP_KEY)) {
+                continue;
+            }
+            Uri lookupUri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_LOOKUP_URI, contactInfo.getLookupId());
+            final Uri uri = ContactsContract.Contacts.lookupContact(context.getContentResolver(), lookupUri);
+            final Cursor c = context.getContentResolver().query(uri, new String[]{ContactsContract.Contacts._ID, ContactsContract.Contacts.PHOTO_ID}, null, null, null);
+            try {
+                if (c != null && c.moveToFirst()) {
+                    boolean hasPhoto = !c.isNull(1);
+                    final long id = c.getLong(0);
+                    long personId = hasPhoto ? id : NO_PHOTO;
+                    contactInfo.setPersonUri(getPersonUri(personId));
+                }
+            } finally {
+                if (c != null) {
+                    c.close();
+                }
+            }
+        }
+    }
+
     private void addCall(String calledPhone, long callDate) {
         final List<ContactInfo> contactInfos = getContactInfos(calledPhone, context);
         for (ContactInfo ci : contactInfos) {
@@ -84,7 +108,12 @@ public class ContactInfoDao {
             try {
                 if (c != null && c.moveToFirst()) {
                     do {
-                        contactInfos.add(getContactInfo(c.getString(0), phone, c.getString(1), c.isNull(3) ? NO_PHOTO : c.getLong(2)));
+                        final long id = c.getLong(0);
+                        final String lookupKey = c.getString(1);
+                        final String displayName = c.getString(2);
+                        final boolean hasPhoto = !c.isNull(3);
+
+                        contactInfos.add(getContactInfo(lookupKey, phone, displayName, hasPhoto ? id : NO_PHOTO));
                     } while (c.moveToNext());
                 }
             } finally {
@@ -93,7 +122,7 @@ public class ContactInfoDao {
                 }
             }
             if (contactInfos.size() == 0) {
-                contactInfos.add(getContactInfo("QD.No lookup key" + phone, phone, null, NO_PHOTO));
+                contactInfos.add(getContactInfo(NO_LOOKUP_KEY + phone, phone, null, NO_PHOTO));
             }
 
             contactsByPhones.put(phone, contactInfos);
@@ -105,15 +134,20 @@ public class ContactInfoDao {
     private ContactInfo getContactInfo(String lookupKey, String phone, String name, long personId) {
         ContactInfo ci = contactsByKeys.get(lookupKey);
         if (ci == null) {
-            final Uri personUri = ContentUris.withAppendedId(
-                    ContactsContract.Contacts.CONTENT_URI, personId);
+            final Uri personUri = getPersonUri(personId);
 
-            ci = new ContactInfo(name, phone, lookupKey, personId != NO_PHOTO ? personUri : null);
+            ci = new ContactInfo(name, phone, lookupKey, personUri);
             synchronized (contactsByKeys) {
                 contactsByKeys.put(lookupKey, ci);
             }
         }
         return ci;
+    }
+
+    private Uri getPersonUri(long personId) {
+        return personId != NO_PHOTO ?
+                ContentUris.withAppendedId( ContactsContract.Contacts.CONTENT_URI, personId) :
+                null;
     }
 
     public Collection<ContactInfo> getContactInfoList() {

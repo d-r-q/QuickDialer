@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
 import android.provider.CallLog;
+import android.provider.ContactsContract;
 import android.util.Log;
 import ru.jdev.qd.QdWidgetProvider;
 import ru.jdev.qd.model.ContactInfoDao;
@@ -31,6 +32,7 @@ public class UpdateService extends Service {
     private final HandlerThread handlerThread = new HandlerThread("Model an UI updating thread");
 
     private CallLogObserver callLogObserver;
+    private ContactsObserver contactsObserver;
 
     private Handler handler;
 
@@ -43,6 +45,9 @@ public class UpdateService extends Service {
 
         callLogObserver = new CallLogObserver(handler, this);
         getContentResolver().registerContentObserver(CallLog.Calls.CONTENT_URI, true, callLogObserver);
+
+        contactsObserver = new ContactsObserver(handler, this, contactImageFactory);
+        getContentResolver().registerContentObserver(ContactsContract.Contacts.CONTENT_URI, true, contactsObserver);
     }
 
     @Override
@@ -84,6 +89,7 @@ public class UpdateService extends Service {
     public void onDestroy() {
         Log.i(TAG, "UpdateService destroyed");
         getContentResolver().unregisterContentObserver(callLogObserver);
+        getContentResolver().unregisterContentObserver(contactsObserver);
         handlerThread.quit();
     }
 

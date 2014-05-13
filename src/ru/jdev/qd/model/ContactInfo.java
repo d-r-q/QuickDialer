@@ -7,7 +7,7 @@ public class ContactInfo {
 
     private final String name;
     private final String lookupId;
-    private final Uri personUri;
+    private volatile Uri personUri;
 
     int usage;
     long lastCall;
@@ -32,12 +32,12 @@ public class ContactInfo {
         return lookupId;
     }
 
-    public int getUsage() {
-        return usage;
-    }
-
     public Uri getPersonUri() {
         return personUri;
+    }
+
+    public void setPersonUri(Uri personUri) {
+        this.personUri = personUri;
     }
 
     public String getContactLabel() {

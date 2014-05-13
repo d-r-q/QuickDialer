@@ -38,4 +38,10 @@ public class ContactImageFactory {
         return new FallbackImageFactory(contactInfo).getFallbackImage();
     }
 
+    public void evictContactPhotos() {
+
+       imagesCache.clear();
+
+    }
+
 }

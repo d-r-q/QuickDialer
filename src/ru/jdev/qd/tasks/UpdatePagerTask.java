@@ -16,6 +16,7 @@ public class UpdatePagerTask implements Runnable {
     @Override
     public void run() {
         contactInfoDao.update();
+        contactInfoDao.updatePhotos();
         pager.fillPage();
     }
 }
