@@ -7,9 +7,7 @@ import android.provider.ContactsContract;
 import ru.jdev.qd.model.ContactInfo;
 
 import java.io.InputStream;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.Map;
 
 public class ContactImageFactory {
 
@@ -38,18 +36,6 @@ public class ContactImageFactory {
         }
 
         return new FallbackImageFactory(contactInfo).getFallbackImage();
-    }
-
-    public void evictContactPhotos() {
-
-        final Iterator<Map.Entry<ContactInfo,Bitmap>> cachedImagesIter = imagesCache.entrySet().iterator();
-        while (cachedImagesIter.hasNext()) {
-            Map.Entry<ContactInfo, Bitmap> cachedImg = cachedImagesIter.next();
-            if (cachedImg.getKey().getPersonUri() != null) {
-                cachedImagesIter.remove();
-            }
-        }
-
     }
 
 }
